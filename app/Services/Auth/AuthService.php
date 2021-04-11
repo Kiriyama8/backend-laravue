@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Events\UserRegistered;
 use App\Exceptions\LoginInvalidException;
 use App\Exceptions\UserHasBeenTakenException;
 use App\Models\User;
@@ -44,17 +45,21 @@ class AuthService
         $user = User::where('email', $email)->exists();
 
         if (!empty($user)) {
-            throw new UserHasBeenTakenException('Usuário já cadastrado');
+            throw new UserHasBeenTakenException();
         }
 
         $encryptPassword = bcrypt($password ?? Str::random(10));
 
-        return User::create([
+        $user = User::create([
             'first_name' => $firstName,
             'last_name' => $lastName,
-            'email' => $lastName,
+            'email' => $email,
             'password' => $encryptPassword,
             'confirmation_token' => Str::random(60)
         ]);
+
+        event(new UserRegistered($user));
+
+        return $user;
     }
 }
