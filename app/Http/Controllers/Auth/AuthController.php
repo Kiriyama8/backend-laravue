@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\AuthLoginRequest;
 use App\Http\Requests\Auth\AuthRegisterRequest;
+use App\Http\Requests\Auth\AuthVerifyEmailRequest;
 use App\Http\Resources\UserResource;
 use App\Services\Auth\AuthService;
 
@@ -43,6 +44,20 @@ class AuthController extends Controller
         $input = $authRegisterRequest->validated();
 
         $user = $this->authService->register($input['first_name'], $input['last_name'] ?? '', $input['email'], $input['password']);
+
+        return (new UserResource($user));
+    }
+
+    /**
+     * @param AuthVerifyEmailRequest $authVerifyEmailRequest
+     * @return UserResource
+     * @throws \App\Exceptions\VerifyEmailTokenInvalidException
+     */
+    public function verifyEmail(AuthVerifyEmailRequest $authVerifyEmailRequest): UserResource
+    {
+        $input = $authVerifyEmailRequest->validated();
+
+        $user = $this->authService->verifyEmail($input['token']);
 
         return (new UserResource($user));
     }
