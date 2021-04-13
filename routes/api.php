@@ -22,6 +22,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('login');
     Route::post('register', [AuthController::class, 'register'])->name('register');
-    Route::post('verify-email', [AuthController::class, 'verifyEmail'])->name('verifyEmail');
+    Route::post('verify-email', [AuthController::class, 'verifyEmail'])->name('verify-email');
+    Route::post('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password');
+    Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('reset-password');
 });
 
