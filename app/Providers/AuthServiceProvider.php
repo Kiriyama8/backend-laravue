@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Todo;
+use App\Models\TodoTask;
+use App\Policies\TodoPolicy;
+use App\Policies\TodoTaskPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -13,7 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        Todo::class => TodoPolicy::class,
+        TodoTask::class => TodoTaskPolicy::class
     ];
 
     /**
