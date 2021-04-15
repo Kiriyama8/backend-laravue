@@ -10,6 +10,7 @@ use App\Http\Resources\TodoResource;
 use App\Http\Resources\TodoTaskResource;
 use App\Models\Todo;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class TodoController extends Controller
@@ -35,9 +36,12 @@ class TodoController extends Controller
     /**
      * @param Todo $todo
      * @return TodoResource
+     * @throws AuthorizationException
      */
     public function show(Todo $todo): TodoResource
     {
+        $this->authorize('show', $todo);
+
         $todo->load('tasks');
 
         return new TodoResource($todo);
@@ -65,6 +69,8 @@ class TodoController extends Controller
      */
     public function update(Todo $todo, TodoUpdateRequest $todoUpdateRequest): TodoResource
     {
+        $this->authorize('update', $todo);
+
         $input = $todoUpdateRequest->validated();
 
         $todo->fill($input);
@@ -79,6 +85,8 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
+        $this->authorize('destroy', $todo);
+
         $todo->delete();
     }
 
@@ -89,6 +97,8 @@ class TodoController extends Controller
      */
     public function createTask(Todo $todo, TodoTaskStoreRequest $todoTaskStoreRequest): TodoTaskResource
     {
+        $this->authorize('createTask', $todo);
+
         $input = $todoTaskStoreRequest->validated();
 
         $todoTask = $todo->tasks()->create($input);

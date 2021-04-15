@@ -7,6 +7,7 @@ use App\Http\Requests\Todo\TodoTaskUpdateRequest;
 use App\Http\Resources\TodoTaskResource;
 use App\Models\TodoTask;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class TodoTaskController extends Controller
@@ -23,9 +24,12 @@ class TodoTaskController extends Controller
      * @param TodoTask $todoTask
      * @param TodoTaskUpdateRequest $todoTaskUpdateRequest
      * @return TodoTaskResource
+     * @throws AuthorizationException
      */
     public function update(TodoTask $todoTask, TodoTaskUpdateRequest $todoTaskUpdateRequest): TodoTaskResource
     {
+        $this->authorize('update', $todoTask);
+
         $input = $todoTaskUpdateRequest->validated();
 
         $todoTask = $todoTask->fill($input);
@@ -40,6 +44,8 @@ class TodoTaskController extends Controller
      */
     public function destroy(TodoTask $todoTask)
     {
+        $this->authorize('destroy', $todoTask);
+
         $todoTask->delete();
     }
 }
