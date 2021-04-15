@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\MeController;
 use App\Http\Controllers\Todo\TodoController;
+use App\Http\Controllers\Todo\TodoTaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,11 +31,16 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('todos')->group(function () {
         Route::get('', [TodoController::class, 'index'])->name('todos');
-        Route::get('{todo}', [TodoController::class, 'show'])->name('show');
-        Route::post('', [TodoController::class, 'store'])->name('todos.store');
-        Route::put('{todo}', [TodoController::class, 'update'])->name('todos.update');
-        Route::delete('{todo}', [TodoController::class, 'destroy'])->name('todos.destroy');
-        Route::post('{todo}/tasks', [TodoController::class, 'createTask'])->name('todos.createTask');
+        Route::get('{todo}', [TodoController::class, 'show'])->name('todo.show');
+        Route::post('', [TodoController::class, 'store'])->name('todo.store');
+        Route::put('{todo}', [TodoController::class, 'update'])->name('todo.update');
+        Route::delete('{todo}', [TodoController::class, 'destroy'])->name('todo.destroy');
+        Route::post('{todo}/tasks', [TodoController::class, 'createTask'])->name('todo.createTask');
+    });
+
+    Route::prefix('tasks')->group(function () {
+        Route::put('{todoTask}', [TodoTaskController::class, 'update'])->name('task.update');
+        Route::delete('{todoTask}', [TodoTaskController::class, 'destroy'])->name('task.destroy');
     });
 });
 
