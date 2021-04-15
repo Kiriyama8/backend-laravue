@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\MeController;
+use App\Http\Controllers\Todo\TodoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,15 @@ Route::prefix('v1')->group(function () {
     Route::prefix('me')->group(function () {
         Route::get('', [MeController::class, 'index'])->name('me');
         Route::put('', [MeController::class, 'update'])->name('me.update');
+    });
+
+    Route::prefix('todos')->group(function () {
+        Route::get('', [TodoController::class, 'index'])->name('todos');
+        Route::get('{todo}', [TodoController::class, 'show'])->name('show');
+        Route::post('', [TodoController::class, 'store'])->name('todos.store');
+        Route::put('{todo}', [TodoController::class, 'update'])->name('todos.update');
+        Route::delete('{todo}', [TodoController::class, 'destroy'])->name('todos.destroy');
+        Route::post('{todo}/tasks', [TodoController::class, 'createTask'])->name('todos.createTask');
     });
 });
 
